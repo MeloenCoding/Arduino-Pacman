@@ -1,0 +1,117 @@
+
+
+video{
+  width: 400px;
+  height: 400px;
+}
+
+a:hover{
+  color: rgb(135, 192, 145);  
+}
+
+
+li{
+  color: white;
+  a{
+    color: rgb(219, 219, 219);  
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.1s ease-in-out;
+    font-size: large;
+    :hover{
+    color: rgb(135, 192, 145);  
+    }
+  }
+}
+
+h1{
+  font-size: 50px;
+  color: rgb(235, 235, 235);
+  font-weight: 700;    
+}
+h2{
+  font-size: large;
+  color: rgba(219, 219, 219, 0.65);  
+  font-weight: 500;  
+  font-style: italic;
+}
+h4{
+  font-size: medium;
+  color: rgb(175, 211, 214);   
+  font-weight: 500;
+}
+
+h3{
+  color: rgb(219, 219, 219);
+  font-size: x-large;
+  font-weight: 600;
+}
+
+.kop{
+  font-size: x-large;
+  font-style: none;
+  margin-top: 80px;
+}
+.kop2{
+  font-size: xx-large;
+  font-style: none;
+  font-weight: 700;
+  margin-top: 100px;
+}
+
+img{
+  width: 500px;
+}
+
+body{
+  display: flex;
+  background-color: #20242a;
+  font-family: 'Open Sans', sans-serif;
+  main{
+    flex-direction: column;
+    display: flex;
+    margin: 0 auto;
+    padding-top: 200px;
+    padding-bottom: 200px;
+    max-width: 1000px;
+    .headline{
+      text-align: center;
+    }
+    .voorwoord{
+      margin-top: 70px;
+    }
+    .inhoud{
+      margin: 60px 0;
+    }
+  }
+}
+
+.grid1 td{
+  width:10px; height:10px;
+  border:1px solid #ccc;
+  color: white;
+  padding: 10px;
+  background-color: #20242a;
+  text-align:center;
+  font-family:sans-serif; 
+  font-size:13px;
+}
+
+code{
+  font-size: 18px;
+  background-color: #121518;
+}
+.picGalery{
+  display: flex;
+  flex-direction: row;
+  img{
+    padding: 10px;
+  }
+}
+
+.codeTest{
+  width: 500px;
+}
+.bordImg{
+  width: 500px;
+}

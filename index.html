@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profielwerkstuk</title>
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&display=swap" rel="stylesheet"> 
+  <link rel="stylesheet" href="./prism/prism.css">
+</head>
+<body>
+  <main>
+    <section class="headline">
+      <h1>Pacman maken met de Arduino Mega</h1>
+      <h2>Door Dylan Zwiers en Mellon Bambacht</h2>
+    </section>
+    <section class="voorwoord">
+      <h4>
+        Wij hebben gekozen voor dit project omdat het ons erg leuk en interessant leek. Ook hielden
+        wij wel van een uitdaging. In dit verslag leggen wij het pad uit die wij hebben verlopen om 
+        het eindresultaat te bereiken.
+      </h4>
+    </section>
+    <section class="inhoud">
+      <h3 class="kop">Inhoud</h3>
+      <ul>
+        <li><a href="#inleiding">Inleiding</a></li>
+        <li><a href="#project">Het project</a>
+          <ul>
+            <li><a href="#testen">Testen</a></li>
+            <li><a href="#setup">De setup</a></li>
+            <li><a href="#controller">De controller</a></li>
+            <li><a href="#code">De code</a>
+            <ul>
+              <li><a href="#matrix.x">matrix.X</a></li>
+              <li><a href="#matrixMap">matrixMap</a></li>
+              <li><a href="#rewrite">Herschrijven matrix.X</a></li>
+              <li><a href="#speler">Speler maken</a></li>
+              <li><a href="#food">Puntensysteem</a></li>
+              <li><a href="#map">De map</a></li>
+              <li><a href="#enemies">Enemies</a></li>
+              <li><a href="#moeilijkheid">Moeilijkheidsgraad</a></li>
+            </ul>
+            </li>
+            <li><a href="#joystick">Joystick</a></li>
+          </ul>
+          <li><a href="#conclusie">Conclusie</a></li>
+          <li><a href="#helecode">Hele code</a></li>
+          <li><a href="#bronnen">Bronnen</a></li>
+        </li>
+      </ol>
+    </section>
+    <section class="Inleiding" id="inleiding">
+      <h3 class="kop">Inleiding</h3>
+      <h4>
+        Wij hebben voor dit project de Arduino Mega gebruikt. Dit is een programmeerbaar bordje waar je meerdere 
+        soorten elektronica op kan aansluiten. Zo kun je met dit bordje een thermometer, een weerstation 
+        of bijvoorbeeld een inbraakalarm maken. De opties zijn bijna oneindig. Ook hebben wij een 64x32 led panel gebruikt.
+        Deze hebben wij gebruikt om het spel te laten zien. De documentatie van het led panel is helemaal 
+        waardeloos dus hebben we bijna alles zelf moeten uitzoeken. Ook hebben we nog andere spullen gebruikt. 
+        Hier later meer over.
+      </h4>
+    </section>
+    <section class="project" id="project">
+      <h3 class="kop2">Het project</h3>
+      <h4>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga incidunt illum praesentium doloribus ullam provident facere enim rerum labore! Quia, numquam veritatis ipsam a assumenda animi laudantium labore inventore minus.
+      </h4>
+    </section>
+    <section class="testing" id="testen">
+      <h3 class="kop">Testen</h3>
+      <h4>
+        Voordat we begonnen aan dit project wisten we nog helemaal niks over de Arduino. Mellon had al ervaring met C++, waar de taal 
+        programmeer taal van de Arduino op gebaseerd is, dus kon hij het best snel. Voordat we dus echt konden beginnen, moesten we eerst wat dingen gaan testen
+        omdat we nog niet heel veel van wisten.
+      </h4>
+      <h4>
+        Het eerste wat wij probeerde was heel simpel. Een programma schrijven om een lampje op een breadboard aan te laten gaan.
+        Dit was de opstelling die wij hadden gemaakt:
+      </h4>
+      <video autoplay loop muted>
+        <source src="./src/arduino test.mp4" type="video/mp4">
+      </video>
+      <h4>
+        Hier loopt er constant stroom door het knopje heen. Pas als het knopje wordt ingedrukt, loopt er stroom door naar de Arduino.
+        De stroom loopt dan door het knopje naar de Arduino waar het is aangesloten op een Digital Pin. Hieruit kan de Arduino een hoog en een laag signaal lezen. Hoog als er stroom inloopt
+        en laag als dat niet zo is.
+      </h4>
+      <h4>
+        Hoog = 1 <br>
+        Laag = 0
+      </h4>
+      <h4>
+        Hierdoor kan je gemakklijk in de Arduino een simpele code scrijven om weer op een andere pin stroom weg te laten voeren.
+      </h4> 
+      <pre class="line-numbers"><code class="language-ino">void setup() // code die maar 1x wordt uitgevoerd
+{
+  pinMode(2, INPUT); // luister op pin 2 voor signalen
+  pinMode(12, OUTPUT); // output signalen op pin 12
+  digitalWrite(12, LOW); // zet de output op een laag signaal
+}
+
+void loop() // blijft oneindig lang runnen
+  if (digitalRead(2) == HIGH) { // als pin 2 een signaal binnenkrijgt doe ->
+    digitalWrite(12, HIGH); // zend een hoog signaal uit op pin 12
+    delay(10); // wacht 10 ms 
+    digitalWrite(12, LOW); // stop met signaal geven op pin 12
+  }
+  delay(10); // wacht 10 ms
+}</code></pre> 
+      <h4>
+        Deze kleine test lijkt waardeloos maar heeft wel goede kennis opgedaan. Later hebben we dit namelijk nog nodig.
+      </h4>
+    </section>
+    <section class="bord" id="setup">
+      <h3 class="kop" >De setup</h3>
+      <h4>
+        Dylan noemde het spagettie. Het is namelijk een grote bende vol met draadjes, maar toch was het ons gelukt om dit bord 
+        aan te sluiten. Alle draadjes moesten in een adapter worden gestopt en daarna op de juiste manier aan de 
+        Arduino worden aangesloten. 
+      </h4>
+      <img class="bordImg" src="./src/bord aansluiting.jpg" alt="bord aansluitingen">
+      <h4>
+        In onze code zag het er wat rustiger uit. Naast deze code en de ingewikelde draadjes was dit de hele setup van ons 
+        project.
+      </h4>
+      <pre class="line-numbers"><code class="language-ino">#include &#60;RGBmatrixPanel.h&#62; // de driver voor het Led Panel
+// deze stukjes code zijn voor de driver zodat het met het bord kan communiceren
+#define CLK 11
+#define OE   9 
+#define LAT 10
+#define A   A0
+#define B   A1
+#define C   A2
+#define D   A3
+RGBmatrixPanel matrix(A, B, C, D, CLK, LAT, OE, false, 64); // vertel tegen de driver op welke 
+                                                            // pin ze wat kunnen vinden</code></pre>
+    </section>
+    <section class="controller" id="controller">
+      <h3 class="kop">De controller maken</h3>
+      <h4>
+        Eerder vertelde wij over het maken van een knopje die een lampje aan doet. Wat wij daarvan hebben geleerd,
+        is dat het heel erg belangrijk is om een weerstandje te zetten op de kant waar de stroom heen gaat lopen. Dit zorgt 
+        ervoor dat de Arduino beter het echte signaal op pakt en het zwakkere signaal negeerd. Dit zorgt voor naukeurigere 
+        lezingen van de Arduino. Dit heet 'lekstroom'. Er loopt namelijk altijd wel een heel klein beetje stroom door het 
+        knopje en daardoor zal de Arduino ALTIJD een signaal opvangen, ondanks de knop wordt ingedrukt.
+      </h4>
+      <img src="./src/Controller setup.PNG" alt="controller setup">
+      <h4>
+        Dit is hoe wij de controller hadden gemaakt. Er zijn 4 buttons op volgorde van: links, beneden, rechts, boven.
+        Dit hebben wij gemaakt voor het testen. Later in het project sluiten wij er een joystick op aan.
+      </h4>
+      <pre class="line-numbers"><code class="language-ino">pinMode(2, INPUT); // luister naar input links
+pinMode(3, INPUT); // luister naar input beneden
+pinMode(4, INPUT); // luister naar input rechts
+pinMode(5, INPUT); // luister naar input boven</code></pre>
+    </section>
+    <h4>Dit was alles wat nodig hadden en wat wij gemaakt hadden voordat we aan het project waren begonnen.</h4>
+    <section class="code" id="code">
+      <h3 class="kop2">De code</h3>
+      <h4>
+        Dit deel is verdeeld in allemaal kleine stukjes omdat het een hele lange code is. Ik vind het belangrijk om alles 
+        goed uit te leggen. 
+      </h4>
+    <section id="matrix.x">
+        <h3 class="kop">matrix.X</h3>
+        <h4>
+          Aan het begin van dit project wisten we nog niet zo veel over hoe we alle functies in de driver konden gebruiken. 
+          Daarom zijn we begonnen met wat kleine dingen eerst uitproberen. We kwamen er achter dat de driver een aantal functies had.
+        </h4>
+        <pre class="line-numbers"><code class="language-ino">matrix.width() // geeft de breedte van de matrix
+matrix.height() // geeft de hoogte van de matrix 
+// de matrix begint met tellen vanaf 0
+// de matrix is 64x32 dus begint op x=0 tot x=63 en y=0 tot y=31
+// dus de uitkomst van matrix.width() = 63 en van matrix.height() = 31
+</code></pre>
+        <pre class="line-numbers"><code class="language-ino">matrix.Color333(7, 0, 7) // paars
+// verteld tegen de Arduino welke kleur iets moet worden. Het is een RGB led bord 
+// dus 7,0,0 wordt rood en 0,7,0 groen enzovoort
+</code></pre>
+        <pre class="line-numbers"><code class="language-ino">matrix.drawPixel(x, y, matrix.Color333(7, 0, 7)); 
+// tekent een pixel op het bord op plek x y met een kleur paars
+</code></pre>
+        <pre class="line-numbers"><code class="language-ino">matrix.drawRect(x1, y1, x2, y2, matrix.Color333(0, 0, 7));
+// tekent een vierkant op plek x1 y1 tot x2 y2 met een kleur blauw
+
+matrix.drawLine(x1, y, x2, y, matrix.Color333(0, 0, 7)); // tekent een lijn op het bord 
+                                                         // van x1 y1 tot x2 y2
+</code></pre>
+      </section>
+    <section id="matrixMap">
+        <h3 class="kop">matrixMap</h3>
+        <h4>
+          Omdat wij een spel maken waarin er pixels moeten bewegen op een grid, is het nodig om een soort lijst te maken 
+          met de coordinaten van alle dingen in het spel. Zoals wij al verteld hebben start het bord met tellen op x=0 en y=0.
+          Die coordinaten staan helemaal links boven in. Hieruit volgt: 
+        </h4>
+        <pre class="line-numbers"><code class="language-ino">int matrixMap[64][32];
+int enemyMap[64][32]; 
+// Dit stukje code maakt een lijst aan waarin waardes worden opgeslagen als matrixMap[x][y] = 0.
+// stel dat wij de code matrixMap[0][3] = 1 nu zouden intypen, dan is dit hoe de 
+// map er uitziet. Dus op rij 1 en hoogte 4 vanaf links boven:
+//
+// 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,...
+// 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,...
+// 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,...
+// 1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,...
+// 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,...
+// ...
+</code></pre>
+
+            <!-- <canvas  id="bord1" width="640" height="320">Display is not supported. Use different broweser.</canvas> -->
+          <h4>
+            Helaas liepen wij tegen een probleem aan. Op de Arduino kan je maar een bepaalde hoeveelheid geheugen gebruiken.
+            De map die wij net maakte heeft 64x32 layout. Dus heeft totaal 2048 getallen opgeslagen. Dat dan weer x2 omdat 
+            het 2 mappen zijn. Dat zorgt er voor dat we meer dan 80% OVER het toegestande geheugen zitten.
+            <br>
+            <br>
+            Deze hele map is bedoelt voor later in het project als wij de muren, het eten, de enemys en portalen gaan maken. Dus
+            Daarom waren wij gekomen met deze oplossing:
+          </h4>
+          <pre class="line-numbers"><code class="language-ino">byte matrixMap[64][32];
+byte enemyMap[64][32];
+// Voor matrixMap geldt : 0=pad 1=muur 2=eten 3=portaal <br>
+// Voor enemyMap geldt : 0=pad 1=muur 2=kruispunt</code></pre>
+          <h4>
+            <code>INT</code>  = cijfer en die relatief veel ruimte in beslag in tegenstelling tot een BYTE 
+            <br>
+            <code>BYTE</code>  = bestaat uit 4 bits. Bits zijn het kleinste stukje in een computer. Letterlijk een 0 of een 1. Deze nemen dus veel 
+            minder ruimte in beslag.
+            <br>
+            <br>
+            Dit zorgde ervoor dat we meer dan genoeg ruimte over hadden voor de rest van het project.
+          </h4>
+          <h4>
+            
+          </h4>
+          <h4>
+            
+          </h4>
+          
+      </section>
+    <section id="rewrite">
+        <h3 class="kop">Herschrijven van sommige matrix.X functies</h3>
+        <h4>
+          Om het coderen later veel makkelijker te maken creeren we hier functies om een lijn te maken. 
+          Later kunnen we dan makkelijk de muren in coderen zonder al deze regels handmatig te moeten typen. Ook zie je in deze code 
+          dat er waardes naar 1 worden gezet in de matrix mappen. 
+        </h4>
+        <pre class="line-numbers"><code class="language-ino">void drawlineH(int x1, int x2, int y) { // teken een horizontale lijn
+  int len = x2 - x1 + 1; // bereken de lengte van de lijn
+  for (int i = 0; i < len; i++) { // herhaal de volgende code tot elke pixel in de lijn in de 
+                                  // matrixmap staat
+
+    matrixMap[x1 + i][y] = 1; // zet de locatie van de pixel in de matrixMap naar 1. Een muur dus
+    enemyMap[x1 + i][y] = 1; // zet de locatie van de pixel in de enemyMap naar 1. Een muur dus
+  }
+  matrix.drawLine(x1, y, x2, y, matrix.Color333(0, 0, 7));// teken de lijn op het bord met de 
+                                                          // matrix.X funcite
+}
+
+void drawlineV(int y1, int y2, int x) { // teken een verticale lijn
+  int len = y2 - y1 + 1; // bereken de lengte van de lijn
+  for (int i = 0; i < len; i++) { // herhaal de volgende code tot elke pixel in de lijn in de
+                                  // matrix map staat
+
+    matrixMap[x][y1 + i] = 1; // zet de locatie van de pixel in de matrixMap naar 1. Een muur dus
+    enemyMap[x][y1 + i] = 1; // zet de locatie van de pixel in de enemyMap naar 1. Een muur dus
+  }
+  matrix.drawLine(x, y1, x, y2, matrix.Color333(0, 0, 7));// teken de lijn op het bord
+                                                          // met de matrix.X functie
+}</code></pre>
+      </section>
+    <section id="speler">
+        <h3 class="kop">Speler maken</h3>
+        <h4>
+          Toen we de muur functies af hadden, gingen we werken aan ook echt een pixel laten bewegen op het bord.
+          Hiervoor kunnen we simpel <code>matrix.drawPixel(x,y,Color333)</code>  gebruiken. In elk spel zit een klok en die
+          update het spel. Hievoor gebruikte wij een while loop. Als de speler af gaat door een enemy dan word de 
+          variabele <code>gameStarted</code>  naar <code> False</code> gezet en eindigt de loop.
+        </h4>
+        <pre class="line-numbers"><code class="language-ino">while(gameStarted){// game code die elke frame moet worden uitgevoerd...
+  // code...
+  delay(80); // 80 miliseconde delay voor beter kwaliteit van het spel
+}
+</code></pre>
+        <h4>Omdat we de locatie van de speler bij moeten houden maken we hier variablen voor. De speler begint nu op plek x=1 y=1.</h4>
+        <pre class="line-numbers"><code class="language-ino">int playerLocationX = 1;
+int playerLocationY = 1;</code></pre>
+          <h4>
+            Nu kunnen we alles combineren:
+          </h4>
+        <pre class="line-numbers"><code class="language-ino">while(gameStarted) {
+  if(digitalRead(2) == HIGH) { // knopje naar links wordt ingedrukt
+    if(playerLocationX - 1 > 0 ) {  // als de speler 1 naar links gaat, is de speler dan niet 
+                                    // buiten de matrix?
+      matrix.drawPixel(playerLocationX, playerLocationY, matrix.Color333(0, 0, 0)); 
+      // zet de pixel van de oude locatie uit want Color333(0,0,0) is geen rood, groen of blauw lichtje.
+
+      playerLocationX--; // update playerLocationX met -1 want -1 is naar links.
+    }
+  }
+  // hetzelfde voor input rechts, beneden, boven...
+  // ...
+
+  matrix.drawPixel(playerLocationX, playerLocationY, matrix.Color333(7, 7, 0)); 
+  // teken de speler nadat een klok cyclus voor bij is.
+  delay(80);
+}
+</code></pre>
+      <h4>
+        Op deze manier kan de speler alle kanten op bewegen. Maar hier hebben we weer een probleem. De speler kan door de muren 
+        heen bewegen. Hiervoor hebben we een aparte functie gemaakt. Een <code>bool</code> staat voor <code>true</code> of <code>false</code>
+        Deze kunnen we dan in onze speler move gebruiken om te testen of de volgende zet geen muur is.
+      </h4>
+      <pre class="line-numbers"><code class="language-ino">bool nextMovePossible(int x, int y) { // check of de volgende zet niet een muur is
+  if (matrixMap[x][y] == 1) { // is het geen muur?
+    return false; // wel muur
+  }
+  return true; // geen muur
+}</code></pre>
+      <h4>
+        Hieruit volgt: 
+      </h4>
+<pre class="line-numbers"><code class="language-ino">if(digitalRead(2) == HIGH) {
+  if(playerLocationX - 1 > 0 && nextMovePossible(playerLocationX - 1, playerLocationY)) {
+    // controleert dus of de speler niet buiten de matrix is EN (&&) of de volgende zet geen muur is.
+    matrix.drawPixel(playerLocationX, playerLocationY, matrix.Color333(0, 0, 0)); 
+    playerLocationX--; 
+  }
+}
+// voor boven, benden en rechts het zelfde
+// ...</code></pre>
+      <h4>
+        Op deze manier kan de speler vrij bewegen. Het kan niet door muren heen enook niet buiten de matrix komen.
+      </h4>
+      </section>
+      <section id="food">
+        <h3 class="kop">Puntensysteem</h3>
+        <h4>
+          Wij hebben lang nagedacht over de manier hoe we punten kunnen geven aan de speler. Je kan bijvoorbeeld punten
+          geven voor hoelang de speler overleefd of hoeveel tegenstanders je opeet. Maar wij zijn toch gegaan voor het 
+          standaard puntensysteem van pacman. Punten krijgen door middel van eten op eten. 
+          <br>
+          <br>
+          Hiervoor leek het ons handig om een <code>drawFood()</code> functie te maken.
+        </h4>
+        <pre class="line-numbers"><code class="language-ino">void drawFood(int x, int y) { // teken eten op plek x y
+  matrixMap[x][y] = 2; // het punt in de matrix map zetten naar 2. Dat betekend eten
+  matrix.drawPixel(x, y, matrix.Color333(7, 0, 7)); // de pixel tekenen
+}</code></pre>
+        <h4>
+          Ook hebben we een manier nodig om score te laten zien. Op het led panel hebben we een plekje vrijgehouden om de score 
+          laten zien. Ook hiervoor hebbben we een functie gemaakt. Elke keer als er weer een klokcyclus voorbij is, moet deze functie
+          worden uitgevoerd.
+        </h4>
+        <pre class="line-numbers"><code class="language-ino">void drawScoreLine(int totalScore){
+  if (totalScore == 30)
+  {
+    gameStarted = false; // als je 30 punten hebt, win je en stopt het spel
+  }
+  else{
+    if(totalScore > 0){ // teken een lijn pas als de score groter is dan 0
+      matrix.drawLine(62, 30, 62, 30-totalScore+1, matrix.Color333(7, 0, 7)); // teken een paarse lijn als
+                                                                              // score lijn
+    }
+  }
+}</code></pre> 
+      <h4>
+        Een score lijn is erg leuk maar als je geen eten kan op eten is het erg lastig om het spel te winnen. Ook dit moet elke 
+        klokcyclus worden gechecked zodat het eten bij de scorelijn kan worden toegevoegd. Hierom dus weer een functie:
+      </h4>
+
+      <pre class="line-numbers"><code class="language-ino">bool isOnFood(int x, int y) { 
+  if (matrixMap[x][y] == 2) { // is de speler op eten?
+    return true; // ja
+  }
+  return false; // nee
+}</code></pre><h4>In onze game loop krijgen we dus: </h4>
+        <pre class="line-numbers"><code class="language-ino">while(gameStarted){
+  // ...
+  if (isOnFood(playerLocationX, playerLocationY)) { // is de speler op eten?
+
+    matrixMap[playerLocationX][playerLocationY] = 0;  // haal het eten uit de matrix. anders kan je het 
+                                                      // meerdere keren eten
+    playerFoodCount++; // update food variabele
+
+  }
+  drawScoreLine(playerFoodCount); // update score lijn
+  // meer code ...
+}</code></pre>
+
+      </section>
+      <section id="map">
+        <h3 class="kop">De map</h3>
+        <h4>
+          Het maken van de map nam het grootse deel van onze tijd in beslag. Heel veel tijd waren we kwijt aan het uitzoeken
+          van de meest efficiente manier om code om te zetten naar de led lampjes. 
+        </h4>
+        <h4>
+          Als eerst hebben wij geprobeerd om text om te zetten naar pixels. Hier wilde wij dan over heen gaan met een loop
+          die text omzet naar een pixels op het led bord. Helaas was dit moeilijker dan dat we in eerste instantie dachten.
+          Hier zijn de lege ruimtes de plek waar de speler door heen kan en het @ symbool was dan de muur. Deze spiegelen
+          we dan ook aan de andere kant en dan heb je een map.
+        </h4>
+        <pre class="line-numbers"><code class="language-ino">'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
+'@              @               @',
+'@              @               @',
+'@  @@@@  @@@@  @  @@@@@  @@@@  @',
+'@  @@@@  @@@@  @  @@@@@  @@@@  @',
+'@  @@@@  @@@@  @  @@@@@  @@@@  @',
+'@  @@@@  @@@@  @  @@@@@  @@@@  @',
+'@                              @',
+'@                              @',
+'@  @@@  @   @@@@@@@   @  @@@@  @',
+'@  @@@  @   @@@@@@@   @  @@@@  @',
+'@       @      @      @        @',
+'@       @      @      @        @',
+'@       @      @      @        @',
+'@       @      @      @        @',
+'@@@@@@  @@@@   @   @@@@  @@@@@@@',
+'@@@@@@  @@@@   @   @@@@  @@@@@@@',
+'@    @  @             @  @     @',
+'@    @  @             @  @     @',
+'@    @  @   @@@@@@@@  @  @     @',
+'@    @  @   @@@@@@@@  @  @     @',
+'@@@@@@  @   @      @  @  @@@@@@@',
+'@@@@@@  @   @      @  @  @@@@@@@',
+'@           @      @           @'
+        </code></pre>
+        <h4>
+          Wat niet lukte met letters hebben we ook nog eens geprobeerd met cijfers. Maar helaas geen geluk. Op dit 
+          moment besefte we dat wij de moeiljke manier moesten gaan doen. We moesten de matrix functies gaan gebruiken en de 
+          matrix map. 
+          <br>
+          <br>
+          Eerst zijn we begonnen met een design maken zodat we de coordinaten makkelijk konden zien. Natuurlijk hebben wij
+          het design gebaseerd op die van de orginele pacman map.
+          Het programma 
+          'Aseprite' kwam hier goed van pas. Dit is eigenlijk een pixelart programma maar er waren een paar functies die
+          ons heel erg goed van pas kwamen. 
+        </h4>
+
+        <img src="./src/aseprite map zonder eten.PNG" alt="aseprite map" width="400px">
+
+        <h4>
+          Een van die handige functies waren de coordinaten links onderin. Hierdoor konden we heel simpel zien op welke 
+          plek bepaalde lijnen moeten komen. Hierdoor hebben we de map redelijk snel kunnen maken. In totaal zijn het er 
+          meer dan 110 lijnen aan code voor 1 map. 
+        </h4>
+        <img src="./src/cooridinaten.PNG" alt="coordinaten">
+        <br>
+        <br>
+        <h4>
+          Na dat we de map hebben in geprogrammeerd hebben we het eten er in gemaakt. Eerst hebben we alles uitgestippeld
+          in het design. Daarna hebben we een soort rondes gemaakt. Elke ronde spawnen er 5 stukjes eten, als je elk stukje
+          op hebt komen er weer 5 op het scherm. Tot je natuurlijk de scorebar vol hebt, want dan heb je gewonnen.
+        </h4>
+        <pre class="line-numbers"><code class="language-ino">if (clockCount == 50){wave(0);}; // clockCount wordt gebruikt omdat 
+                                //anders het eten eerder spawned dan de map
+if (playerFoodCount == 5){wave(1);};
+if (playerFoodCount == 10){wave(2);};
+if (playerFoodCount == 15){wave(3);};
+if (playerFoodCount == 20){wave(4);};
+if (playerFoodCount == 25){wave(5);};
+if (playerFoodCount == 30){handleWin();};</code></pre>
+          <h4>
+            <code>handleWin()</code> zorgt voor dat alles afsluit en het spel stopt. De <code>wave(x)</code> functie zorgt 
+            zorgt voor het eten die moet spawnen elke ronde.
+          </h4>
+          <h4>
+          </h4>
+      </section>
+      <section id="enemies">
+        <h3 class="kop">Enemies</h3>
+        <h4>
+          Eerst dachten wij aan een zoek algoritme. In JavaScript had Mellon dit makkelijk gekunt maar in 
+          de taal waarin we dit project hebben geschreven wilde het maar niet lukken. We hebben 
+          <code><a href="https://nl.wikipedia.org/wiki/Kortstepad-algoritme" style="color: aliceblue;"> Dijkstra's algoritme</a> </code> 
+          (wikipedia) geprobeerd en ook
+          <code><a href="https://nl.wikipedia.org/wiki/Breadth-first_search" style="color: aliceblue;"> Breadth First Search (BFS)</a></code>
+          (wikipedia) maar, helaas waren ze bijde niet gelukt.
+        </h4>
+        <h4>
+          Daarom zijn we met een eigen oplossing gekomen. We hebben handmatig op elk punt van de map de 
+          kruisingen aangeven in de enemyMap. Hierdoor kunnen we elke game klok checken of de enemy op een 
+          kruising staat waarbij we ze dan een random richting in kunnen sturen.
+        </h4>
+        <h4>
+          Hiervoor hebben we een paar variablen moeten aanmaken. We wilde 4 enemies hebben waar we van alle 
+          de coordinaten en de richting moesten opslaan.
+        </h4>
+        <pre class="line-numbers"><code class="language-ino">//enemy info
+int enemyLocationX = 0;
+int enemyLocationY = 0;
+int enemyDir = 0; // 0 naar boven 1 naar rechts 2 naar beneden 3 naar links
+
+int enemyLocationX2 = 0;
+int enemyLocationY2 = 0;
+int enemyDir2 = 2; 
+
+int enemyLocationX3 = 0;
+int enemyLocationY3 = 0;
+int enemyDir3 = 1; 
+
+int enemyLocationX4 = 0;
+int enemyLocationY4 = 0;
+int enemyDir4 = 2;</code></pre>
+
+          <h4>
+            Na deze variablen hebben aan te hebben gemaakt kunnen we de benodigde functies maken. Eerst 
+            maken we een functie waar we een random getal krijgen die we kunnen verbinden aan een richting. <br>
+            0 = boven<br>
+            1 = rechts<br>
+            2 = beneden<br> 
+            3 = links<br>
+            <br>
+            Dat gaan we doen met deze code:
+          </h4>
+          <pre class="line-numbers"><code class="language-ino">long randomNumb = random(0,4);//random number tussen 0-3
+if (randomNumb == 0 ) {enemyDir = 0;}
+else if (randomNumb == 1) {enemyDir = 1;}
+else if (randomNumb == 2) {enemyDir = 2;}
+else if (randomNumb == 3) {enemyDir = 3;}
+</code></pre>
+          <h4>
+            Daarna kunnen we een handleEnemyMovement functie maken waardoor we elke game klok de enemie locatie
+            kunnen updaten. Ook gebruiken we een zelfde soort functie gebruiken als die van de speler; 
+            <code>nextMovePossible</code>. Deze kunnen we ook gebruiken voor de enemy.
+          </h4>
+          <pre class="line-numbers"><code class="language-ino">void handleEnemyMovement1(){
+  if(enemyDir == 0) { // enemy gaat naar boven
+    if (nextMoveEnemy(enemyLocationX, enemyLocationY - 1)) // check of de volgende zet mogelijk is
+    {
+      matrix.drawPixel(enemyLocationX, enemyLocationY, matrix.Color333(0,0,0)); // zet de vorige pixel uit
+      if (matrixMap[enemyLocationX][enemyLocationY] == 2) // als de vorige pixel eten was, terug plaatsen
+      {
+        drawFood(enemyLocationX,enemyLocationY);
+      }
+      enemyLocationY--; // verander de coordinaten van de enemie
+    }
+  }
+  else if(enemyDir == 1) { // enemy gaat naar rechts
+    if (nextMoveEnemy(enemyLocationX + 1, enemyLocationY)) // check of de volgende zet mogelijk is
+    {
+      matrix.drawPixel(enemyLocationX, enemyLocationY, matrix.Color333(0,0,0)); // zet de vorige pixel uit
+      if (matrixMap[enemyLocationX][enemyLocationY] == 2) // als de vorige pixel eten was, terug plaatsen
+      {
+        drawFood(enemyLocationX,enemyLocationY);
+      }
+      enemyLocationX++; // verander de coordinaten van de enemie
+    }
+  }
+  // ... zelfde code voor elke richting
+  // ...
+  if (enemyMap[enemyLocationX][enemyLocationY] == 2) // als de volgende zet een kruispunt is verander 
+                                                     // de richting
+  {
+    long randomNumb = random(0,4); 
+    if (randomNumb == 0 ) {enemyDir = 0;}
+    else if (randomNumb == 1) {enemyDir = 1;}
+    else if (randomNumb == 2) {enemyDir = 2;}
+    else if (randomNumb == 3) {enemyDir = 3;}
+  }
+}
+// ... zelfde voor de andere enemies
+</code></pre>
+      
+      </section>
+      <section id="moeilijkheid">
+        <h3 class="kop">Moeilijkheidsgraad</h3>
+        <h4>
+          Toen wij het spel gingen spelen om te testen was het speel erg lastig. Maar we wilden niet te
+          veel weg halen uit het spel. Daarom hebben we besloten een moeilijkheidsgraad te maken. Easy en Hard.
+          Natuurlijk moet je ook de moeilijkheidsgraad kunnen kiezen dus hebben we er ook een menu bij gemaakt.
+          De code hiervan is niet zo interessant. Maar ik leg het wel uit.
+          <br>
+          <br>
+          In onze game loop hebben wij standaard 2 enemies een random locatie gegeven. Als de game in het start 
+          menu op Hard staat, krijgen de andere 2 enemies ook random locaties. 
+        </h4>
+      </section>
+    </section>
+    <section id="joystick">
+      <h3 class="kop1">Joystick</h3>
+      <h4>
+        Nadat we de hele code klaar hadden wilde wij onze controller gaan veranderen. Wij hadden tot nu toe
+        alleen nog maar dat bordje met wat buttons en heel veel draadjes. Dit is natuurlijk niet echt fijn
+        om mee te spelen dus hebben we aan Meneer Gnodde gevraagd voor een joystick.
+      </h4>
+      <img src="./src/joystick.jpg" alt="joystick">
+      <h4>
+        Aan deze joystick zitten 8 metalen lipjes waar een gatje in zit. Voor bijde X en Y axis zit een plus
+        en een min lipje. Meteen zag Mellon al hoe dit systeem werkte. De joystick zit in soort plusje van 
+        plastic waardoor de joystick naar links rechts boven en beneden kan. Als de joystick naar rechts wordt
+        geduwt, gaat de onder kant van het stokje van de joystick naar links. Deze duwt tegen een 
+        een metaal plaatje waardoor er een gesloten stroom kring ontstaat. We kunnen het zelfde concept als bij de buttons toe passen, want het doet in principe het zelfde als de
+        knopjes die we eerst hadden. 
+        <br>
+        <br>
+        Mellon heeft thuis snoertjes aan de metalen lipjes gesoldeerd en daarna in de juiste gaatjes in de arduino
+        gestopt. Hierdoor hebben we een joystick verbonden aan de arduino.
+      </h4>
+    </section>
+    <section id="conclusie">
+      <h3 class="kop2">Conclusie</h3>
+      <h4>
+        We hebben in dit project veel geleerd. We hebben veel over de arduino programmeer taal geleerd en
+        over elektronica. Meer valt er niet echt over te vertellen. We hebben veel plezier gehaald uit het
+        onderzoek doen naar de arduino en naar verschillende manieren om bepaalde problemen op te lossen.
+      </h4>
+    </section>
+    <h3 id="helecode" class="kop2">Download <a href="./PacMan_Game_Arduino/Eind code.ino">hier</a> de code van het hele project</h3>
+    <section id="bronnen">
+      <h3 class="kop2">Bronnen</h3>
+      <ul>
+        <li><a href="https://www.instructables.com/64x32-RGB-LED-Matrix-With-Arduino-Mega/">Info over het Led panel aansluiten</a></li>
+        <li><a href="https://nl.wikipedia.org/wiki/Kortstepad-algoritme"> Dijkstra's algoritme</a></li>
+        <li><a href="https://nl.wikipedia.org/wiki/Breadth-first_search"> Breadth First Search (BFS)</a></li>
+        <li>De rest uit het hoofd</li>
+      </ul>
+    </section>
+  </main>
+  <script src="./script.js"></script>
+  <script src="./prism/prism.js"></script>
+</body>
+</html>

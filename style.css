@@ -1,0 +1,141 @@
+video {
+  width: 400px;
+  height: 400px;
+}
+
+a:hover {
+  color: #87c091;
+}
+
+li {
+  color: white;
+}
+
+li a {
+  color: #dbdbdb;
+  text-decoration: none;
+  font-weight: 600;
+  -webkit-transition: 0.1s ease-in-out;
+  transition: 0.1s ease-in-out;
+  font-size: large;
+}
+
+li a :hover {
+  color: #87c091;
+}
+
+h1 {
+  font-size: 50px;
+  color: #ebebeb;
+  font-weight: 700;
+}
+
+h2 {
+  font-size: large;
+  color: rgba(219, 219, 219, 0.65);
+  font-weight: 500;
+  font-style: italic;
+}
+
+h4 {
+  font-size: medium;
+  color: #afd3d6;
+  font-weight: 500;
+}
+
+h3 {
+  color: #dbdbdb;
+  font-size: x-large;
+  font-weight: 600;
+}
+
+.kop {
+  font-size: x-large;
+  font-style: none;
+  margin-top: 80px;
+}
+
+.kop2 {
+  font-size: xx-large;
+  font-style: none;
+  font-weight: 700;
+  margin-top: 100px;
+}
+
+img {
+  width: 500px;
+}
+
+body {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  background-color: #20242a;
+  font-family: 'Open Sans', sans-serif;
+}
+
+body main {
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  margin: 0 auto;
+  padding-top: 200px;
+  padding-bottom: 200px;
+  max-width: 1000px;
+}
+
+body main .headline {
+  text-align: center;
+}
+
+body main .voorwoord {
+  margin-top: 70px;
+}
+
+body main .inhoud {
+  margin: 60px 0;
+}
+
+.grid1 td {
+  width: 10px;
+  height: 10px;
+  border: 1px solid #ccc;
+  color: white;
+  padding: 10px;
+  background-color: #20242a;
+  text-align: center;
+  font-family: sans-serif;
+  font-size: 13px;
+}
+
+code {
+  font-size: 18px;
+  background-color: #121518;
+}
+
+.picGalery {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.picGalery img {
+  padding: 10px;
+}
+
+.codeTest {
+  width: 500px;
+}
+
+.bordImg {
+  width: 500px;
+}
+/*# sourceMappingURL=style.css.map */
