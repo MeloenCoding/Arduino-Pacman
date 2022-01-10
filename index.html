@@ -19,9 +19,9 @@
     </section>
     <section class="voorwoord">
       <h4>
-        Wij hebben gekozen voor dit project omdat het ons erg leuk en interessant leek. Ook hielden
-        wij wel van een uitdaging. In dit verslag leggen wij het pad uit die wij hebben verlopen om 
-        het eindresultaat te bereiken.
+        Wij hebben gekozen voor dit project omdat wij het leuk en interessant vonden hoe de Arduino Mega werkt. Wij houden wel 
+        van een uitdaging en wilden dat graag uitzoeken. In het verslag op deze website leggen wij uit, welk pad wij hebben 
+        doorlopen en welke problemen we hebben opgelost, om het eindresultaat – een goed werkend pacman spel – te  bereiken. 
       </h4>
     </section>
     <section class="inhoud">
@@ -56,12 +56,11 @@
     <section class="Inleiding" id="inleiding">
       <h3 class="kop">Inleiding</h3>
       <h4>
-        Wij hebben voor dit project de Arduino Mega gebruikt. Dit is een programmeerbaar bordje waar je meerdere 
-        soorten elektronica op kan aansluiten. Zo kun je met dit bordje een thermometer, een weerstation 
-        of bijvoorbeeld een inbraakalarm maken. De opties zijn bijna oneindig. Ook hebben wij een 64x32 led panel gebruikt.
-        Deze hebben wij gebruikt om het spel te laten zien. De documentatie van het led panel is helemaal 
-        waardeloos dus hebben we bijna alles zelf moeten uitzoeken. Ook hebben we nog andere spullen gebruikt. 
-        Hier later meer over.
+        Wij hebben voor dit project de Arduino Mega gebruikt. Dit is een programmeerbaar micro-controller bord waar je meerdere 
+        soorten elektronica op kan aansluiten. De opties zijn bijna oneindig. Zo kun je met dit apparaatje een thermometer, 
+        een weerstation of bijvoorbeeld een inbraakalarm maken. Ook hebben wij een 64x32 led panel gebruikt.
+        Hierop kunnen we alle pixels bedienen. De documentatie van het led panel is erg slecht, dus hebben we bijna alles 
+        zelf moeten uitzoeken. Ook hebben we nog andere spullen gebruikt. Hier later meer over.
       </h4>
     </section>
     <section class="project" id="project">
@@ -70,12 +69,12 @@
     <section class="testing" id="testen">
       <h3 class="kop">Testen</h3>
       <h4>
-        Voordat we begonnen aan dit project wisten we nog helemaal niks over de Arduino. Mellon had al ervaring met C++, waar de taal 
-        programmeer taal van de Arduino op gebaseerd is, dus kon hij het best snel. Voordat we dus echt konden beginnen, moesten we eerst wat dingen gaan testen
-        omdat we nog niet heel veel van wisten.
+        Voordat we begonnen aan dit project wisten we nog helemaal niks over de Arduino. Mellon had al ervaring met C++, dus 
+        daardoor kon Mellon het best snel. Voordat we echt konden beginnen, zijn we eerst wat dingen gaan testen omdat we nog 
+        niet heel veel wisten.
       </h4>
       <h4>
-        Het eerste wat wij probeerde was heel simpel. Een programma schrijven om een lampje op een breadboard aan te laten gaan.
+        Het eerste wat wij probeerden was heel simpel. Een programma schrijven om een lampje op een breadboard aan te laten gaan.
         Dit was de opstelling die wij hadden gemaakt:
       </h4>
       <video autoplay loop muted>
@@ -85,10 +84,6 @@
         Hier loopt er constant stroom door het knopje heen. Pas als het knopje wordt ingedrukt, loopt er stroom door naar de Arduino.
         De stroom loopt dan door het knopje naar de Arduino waar het is aangesloten op een Digital Pin. Hieruit kan de Arduino een hoog en een laag signaal lezen. Hoog als er stroom inloopt
         en laag als dat niet zo is.
-      </h4>
-      <h4>
-        Hoog = 1 <br>
-        Laag = 0
       </h4>
       <h4>
         Hierdoor kan je gemakklijk in de Arduino een simpele code scrijven om weer op een andere pin stroom weg te laten voeren.
@@ -109,13 +104,14 @@ void loop() // blijft oneindig lang runnen
   delay(10); // wacht 10 ms
 }</code></pre> 
       <h4>
-        Deze kleine test lijkt waardeloos maar heeft wel goede kennis opgedaan. Later hebben we dit namelijk nog nodig.
+        Deze kleine test lijkt op het oog niet belangrijk maar heeft 
+        wel goede kennis opgeleverd. Later hebben we dit namelijk nog nodig.
       </h4>
     </section>
     <section class="bord" id="setup">
-      <h3 class="kop">De setup</h3>
+      <h3 class="kop" >De setup</h3>
       <h4>
-        Dylan noemde het spaghetti. Het is namelijk een grote bende vol met draadjes, maar toch was het ons gelukt om dit bord 
+        Dylan noemde het spagettie. Het is namelijk een grote bende vol met draadjes, maar toch was het ons gelukt om dit bord 
         aan te sluiten. Alle draadjes moesten in een adapter worden gestopt en daarna op de juiste manier aan de 
         Arduino worden aangesloten. 
       </h4>
@@ -155,18 +151,19 @@ pinMode(3, INPUT); // luister naar input beneden
 pinMode(4, INPUT); // luister naar input rechts
 pinMode(5, INPUT); // luister naar input boven</code></pre>
     </section>
-    <h4>Dit was alles wat nodig hadden en wat wij gemaakt hadden voordat we aan het project waren begonnen.</h4>
+    <h4>Dit was alles wat nodig hadden en wat wij gemaakt hadden voordat wij aan het daadwerkelijke project waren begonnen.</h4>
     <section class="code" id="code">
       <h3 class="kop2">De code</h3>
       <h4>
-        Dit deel is verdeeld in allemaal kleine stukjes omdat het een hele lange code is. Ik vind het belangrijk om alles 
+        Dit deel is verdeeld in allemaal kleine stukjes omdat het een hele lange code is. Wij vinden het belangrijk om alles 
         goed uit te leggen. 
       </h4>
     <section id="matrix.x">
         <h3 class="kop">matrix.X</h3>
         <h4>
           Aan het begin van dit project wisten we nog niet zo veel over hoe we alle functies in de driver konden gebruiken. 
-          Daarom zijn we begonnen met wat kleine dingen eerst uitproberen. We kwamen er achter dat de driver een aantal functies had.
+          Daarom zijn we begonnen met wat kleine dingen eerst uitproberen. Zo kwamen we er achter dat de driver een aantal 
+          functies had.
         </h4>
         <pre class="line-numbers"><code class="language-ino">matrix.width() // geeft de breedte van de matrix
 matrix.height() // geeft de hoogte van de matrix 
@@ -191,8 +188,9 @@ matrix.drawLine(x1, y, x2, y, matrix.Color333(0, 0, 7)); // tekent een lijn op h
     <section id="matrixMap">
         <h3 class="kop">matrixMap</h3>
         <h4>
-          Omdat wij een spel maken waarin er pixels moeten bewegen op een grid, is het nodig om een soort lijst te maken 
-          met de coordinaten van alle dingen in het spel. Zoals wij al verteld hebben start het bord met tellen op x=0 en y=0.
+          Omdat wij een spel maken waarin er pixels moeten bewegen op een soort grid, is het nodig om een lijst te maken 
+          met de coordinaten van alle objecten in het spel. Namelijk: voedsel, tegenstanders, muren en natuurlijk de speler. Zoals 
+          wij al verteld hebben start het bord met tellen op x=0 en y=0.
           Die coordinaten staan helemaal links boven in. Hieruit volgt: 
         </h4>
         <pre class="line-numbers"><code class="language-ino">int matrixMap[64][32];
@@ -216,12 +214,12 @@ int enemyMap[64][32];
             het 2 mappen zijn. Dat zorgt er voor dat we meer dan 80% OVER het toegestande geheugen zitten.
             <br>
             <br>
-            Deze hele map is bedoelt voor later in het project als wij de muren, het eten, de enemys en portalen gaan maken. Dus
+            Deze hele map is bedoelt voor later in het project als wij de muren, het voedsel, de enemys en portalen gaan maken. Dus
             Daarom waren wij gekomen met deze oplossing:
           </h4>
           <pre class="line-numbers"><code class="language-ino">byte matrixMap[64][32];
 byte enemyMap[64][32];
-// Voor matrixMap geldt : 0=pad 1=muur 2=eten 3=portaal <br>
+// Voor matrixMap geldt : 0=pad 1=muur 2=voedsel 3=portaal <br>
 // Voor enemyMap geldt : 0=pad 1=muur 2=kruispunt</code></pre>
           <h4>
             <code>INT</code>  = cijfer en die relatief veel ruimte in beslag in tegenstelling tot een BYTE 
@@ -340,13 +338,13 @@ int playerLocationY = 1;</code></pre>
         <h4>
           Wij hebben lang nagedacht over de manier hoe we punten kunnen geven aan de speler. Je kan bijvoorbeeld punten
           geven voor hoelang de speler overleefd of hoeveel tegenstanders je opeet. Maar wij zijn toch gegaan voor het 
-          standaard puntensysteem van pacman. Punten krijgen door middel van eten op eten. 
+          standaard puntensysteem van pacman. Punten krijgen door middel van voedsel op te eten. 
           <br>
           <br>
           Hiervoor leek het ons handig om een <code>drawFood()</code> functie te maken.
         </h4>
-        <pre class="line-numbers"><code class="language-ino">void drawFood(int x, int y) { // teken eten op plek x y
-  matrixMap[x][y] = 2; // het punt in de matrix map zetten naar 2. Dat betekend eten
+        <pre class="line-numbers"><code class="language-ino">void drawFood(int x, int y) { // teken voedsel op plek x y
+  matrixMap[x][y] = 2; // het punt in de matrix map zetten naar 2. Dat betekend voedsel
   matrix.drawPixel(x, y, matrix.Color333(7, 0, 7)); // de pixel tekenen
 }</code></pre>
         <h4>
@@ -367,22 +365,22 @@ int playerLocationY = 1;</code></pre>
   }
 }</code></pre> 
       <h4>
-        Een score lijn is erg leuk maar als je geen eten kan op eten is het erg lastig om het spel te winnen. Ook dit moet elke 
-        klokcyclus worden gechecked zodat het eten bij de scorelijn kan worden toegevoegd. Hierom dus weer een functie:
+        Een score lijn is erg leuk maar als je geen voedsel kan op eten is het erg lastig om het spel te winnen. Ook dit moet elke 
+        klokcyclus worden gechecked zodat het voedsel bij de scorelijn kan worden toegevoegd. Hierom dus weer een functie:
       </h4>
 
       <pre class="line-numbers"><code class="language-ino">bool isOnFood(int x, int y) { 
-  if (matrixMap[x][y] == 2) { // is de speler op eten?
+  if (matrixMap[x][y] == 2) { // is de speler op voedsel?
     return true; // ja
   }
   return false; // nee
 }</code></pre><h4>In onze game loop krijgen we dus: </h4>
         <pre class="line-numbers"><code class="language-ino">while(gameStarted){
   // ...
-  if (isOnFood(playerLocationX, playerLocationY)) { // is de speler op eten?
+  if (isOnFood(playerLocationX, playerLocationY)) { // is de speler op voedsel?
 
-    matrixMap[playerLocationX][playerLocationY] = 0;  // haal het eten uit de matrix. anders kan je het 
-                                                      // meerdere keren eten
+    matrixMap[playerLocationX][playerLocationY] = 0;  // haal het voedsel uit de matrix. anders kan je het 
+                                                      // meerdere keren voedsel
     playerFoodCount++; // update food variabele
 
   }
@@ -452,12 +450,12 @@ int playerLocationY = 1;</code></pre>
         <br>
         <br>
         <h4>
-          Na dat we de map hebben in geprogrammeerd hebben we het eten er in gemaakt. Eerst hebben we alles uitgestippeld
-          in het design. Daarna hebben we een soort rondes gemaakt. Elke ronde spawnen er 5 stukjes eten, als je elk stukje
+          Na dat we de map hebben in geprogrammeerd hebben we het voedsel er in gemaakt. Eerst hebben we alles uitgestippeld
+          in het design. Daarna hebben we een soort rondes gemaakt. Elke ronde spawnen er 5 stukjes voedsel, als je elk stukje
           op hebt komen er weer 5 op het scherm. Tot je natuurlijk de scorebar vol hebt, want dan heb je gewonnen.
         </h4>
         <pre class="line-numbers"><code class="language-ino">if (clockCount == 50){wave(0);}; // clockCount wordt gebruikt omdat 
-                                //anders het eten eerder spawned dan de map
+                                //anders het voedsel eerder spawned dan de map
 if (playerFoodCount == 5){wave(1);};
 if (playerFoodCount == 10){wave(2);};
 if (playerFoodCount == 15){wave(3);};
@@ -466,7 +464,7 @@ if (playerFoodCount == 25){wave(5);};
 if (playerFoodCount == 30){handleWin();};</code></pre>
           <h4>
             <code>handleWin()</code> zorgt voor dat alles afsluit en het spel stopt. De <code>wave(x)</code> functie zorgt 
-            zorgt voor het eten die moet spawnen elke ronde.
+            zorgt voor het voedsel die moet spawnen elke ronde.
           </h4>
           <h4>
           </h4>
@@ -476,9 +474,9 @@ if (playerFoodCount == 30){handleWin();};</code></pre>
         <h4>
           Eerst dachten wij aan een zoek algoritme. In JavaScript had Mellon dit makkelijk gekunt maar in 
           de taal waarin we dit project hebben geschreven wilde het maar niet lukken. We hebben 
-          <code><a  target="_blank" href="https://nl.wikipedia.org/wiki/Kortstepad-algoritme" style="color: aliceblue;"> Dijkstra's algoritme</a> </code> 
+          <code><a href="https://nl.wikipedia.org/wiki/Kortstepad-algoritme" style="color: aliceblue;"> Dijkstra's algoritme</a> </code> 
           (wikipedia) geprobeerd en ook
-          <code><a  target="_blank" href="https://nl.wikipedia.org/wiki/Breadth-first_search" style="color: aliceblue;"> Breadth First Search (BFS)</a></code>
+          <code><a href="https://nl.wikipedia.org/wiki/Breadth-first_search" style="color: aliceblue;"> Breadth First Search (BFS)</a></code>
           (wikipedia) maar, helaas waren ze bijde niet gelukt.
         </h4>
         <h4>
@@ -533,7 +531,7 @@ else if (randomNumb == 3) {enemyDir = 3;}
     if (nextMoveEnemy(enemyLocationX, enemyLocationY - 1)) // check of de volgende zet mogelijk is
     {
       matrix.drawPixel(enemyLocationX, enemyLocationY, matrix.Color333(0,0,0)); // zet de vorige pixel uit
-      if (matrixMap[enemyLocationX][enemyLocationY] == 2) // als de vorige pixel eten was, terug plaatsen
+      if (matrixMap[enemyLocationX][enemyLocationY] == 2) // als de vorige pixel voedsel was, terug plaatsen
       {
         drawFood(enemyLocationX,enemyLocationY);
       }
@@ -544,7 +542,7 @@ else if (randomNumb == 3) {enemyDir = 3;}
     if (nextMoveEnemy(enemyLocationX + 1, enemyLocationY)) // check of de volgende zet mogelijk is
     {
       matrix.drawPixel(enemyLocationX, enemyLocationY, matrix.Color333(0,0,0)); // zet de vorige pixel uit
-      if (matrixMap[enemyLocationX][enemyLocationY] == 2) // als de vorige pixel eten was, terug plaatsen
+      if (matrixMap[enemyLocationX][enemyLocationY] == 2) // als de vorige pixel voedsel was, terug plaatsen
       {
         drawFood(enemyLocationX,enemyLocationY);
       }
@@ -610,13 +608,13 @@ else if (randomNumb == 3) {enemyDir = 3;}
         onderzoek doen naar de arduino en naar verschillende manieren om bepaalde problemen op te lossen.
       </h4>
     </section>
-    <h3 id="helecode" class="kop2">Download <a  target="_blank" href="./PacMan_Game_Arduino/Eind code.ino">hier</a> de code van het hele project</h3>
+    <h3 id="helecode" class="kop2">Download <a href="./PacMan_Game_Arduino/Eind code.ino">hier</a> de code van het hele project</h3>
     <section id="bronnen">
       <h3 class="kop2">Bronnen</h3>
       <ul>
-        <li><a target="_blank" href="https://www.instructables.com/64x32-RGB-LED-Matrix-With-Arduino-Mega/">Info over het Led panel aansluiten</a></li>
-        <li><a target="_blank" href="https://nl.wikipedia.org/wiki/Kortstepad-algoritme"> Dijkstra's algoritme</a></li>
-        <li><a target="_blank" href="https://nl.wikipedia.org/wiki/Breadth-first_search"> Breadth First Search (BFS)</a></li>
+        <li><a href="https://www.instructables.com/64x32-RGB-LED-Matrix-With-Arduino-Mega/">Info over het Led panel aansluiten</a></li>
+        <li><a href="https://nl.wikipedia.org/wiki/Kortstepad-algoritme"> Dijkstra's algoritme</a></li>
+        <li><a href="https://nl.wikipedia.org/wiki/Breadth-first_search"> Breadth First Search (BFS)</a></li>
         <li>De rest uit het hoofd</li>
       </ul>
     </section>
