@@ -209,23 +209,25 @@ int enemyMap[64][32];
 
             <!-- <canvas  id="bord1" width="640" height="320">Display is not supported. Use different broweser.</canvas> -->
           <h4>
+            Deze hele map is bedoelt voor later in het project als wij de muren, het voedsel, de enemys en portalen gaan maken.
             Helaas liepen wij tegen een probleem aan. Op de Arduino kan je maar een bepaalde hoeveelheid geheugen gebruiken.
-            De map die wij net maakte heeft 64x32 layout. Dus heeft totaal 2048 getallen opgeslagen. Dat dan weer x2 omdat 
-            het 2 mappen zijn. Dat zorgt er voor dat we meer dan 80% OVER het toegestande geheugen zitten.
+            De map die wij net maakten heeft 64x32 layout. Dus zijn er totaal 2048 getallen opgeslagen. Dat dan weer x2 omdat 
+            het 2 mappen zijn. Dat zorgt er voor dat we meer dan 80% OVER het toegestane geheugen zitten.
             <br>
             <br>
-            Deze hele map is bedoelt voor later in het project als wij de muren, het voedsel, de enemys en portalen gaan maken. Dus
-            Daarom waren wij gekomen met deze oplossing:
+            Daarom hebben wij de volgende oplossing bedacht:
           </h4>
           <pre class="line-numbers"><code class="language-ino">byte matrixMap[64][32];
 byte enemyMap[64][32];
 // Voor matrixMap geldt : 0=pad 1=muur 2=voedsel 3=portaal <br>
 // Voor enemyMap geldt : 0=pad 1=muur 2=kruispunt</code></pre>
           <h4>
-            <code>INT</code>  = cijfer en die relatief veel ruimte in beslag in tegenstelling tot een BYTE 
+            <code>INT</code>  = is de normale manier om een cijfer te laten zien in code. Maar deze neemt in verhouding 
+            tot de <code>BYTE</code> veel ruimte in beslag.
             <br>
-            <code>BYTE</code>  = bestaat uit 4 bits. Bits zijn het kleinste stukje in een computer. Letterlijk een 0 of een 1. Deze nemen dus veel 
-            minder ruimte in beslag.
+            <br>
+            <code>BYTE</code>  = bestaat uit 4 bits. Bits zijn de kleinste stukjes code in een computer. Letterlijk een 0 of 
+            een 1. Deze nemen dus veel minder ruimte in beslag.
             <br>
             <br>
             Dit zorgde ervoor dat we meer dan genoeg ruimte over hadden voor de rest van het project.
@@ -242,7 +244,7 @@ byte enemyMap[64][32];
         <h3 class="kop">Herschrijven van sommige matrix.X functies</h3>
         <h4>
           Om het coderen later veel makkelijker te maken creeren we hier functies om een lijn te maken. 
-          Later kunnen we dan makkelijk de muren in coderen zonder al deze regels handmatig te moeten typen. Ook zie je in deze code 
+          Later kunnen we dan eenvoudig de muren incoderen zonder al deze regels handmatig te moeten typen. Ook zie je in deze code 
           dat er waardes naar 1 worden gezet in de matrix mappen. 
         </h4>
         <pre class="line-numbers"><code class="language-ino">void drawlineH(int x1, int x2, int y) { // teken een horizontale lijn
@@ -250,8 +252,8 @@ byte enemyMap[64][32];
   for (int i = 0; i < len; i++) { // herhaal de volgende code tot elke pixel in de lijn in de 
                                   // matrixmap staat
 
-    matrixMap[x1 + i][y] = 1; // zet de locatie van de pixel in de matrixMap naar 1. Een muur dus
-    enemyMap[x1 + i][y] = 1; // zet de locatie van de pixel in de enemyMap naar 1. Een muur dus
+    matrixMap[x1 + i][y] = 1; // zet de locatie van de pixel in de matrixMap naar 1 (muur)
+    enemyMap[x1 + i][y] = 1; // zet de locatie van de pixel in de enemyMap naar 1. (muur)
   }
   matrix.drawLine(x1, y, x2, y, matrix.Color333(0, 0, 7));// teken de lijn op het bord met de 
                                                           // matrix.X funcite
@@ -262,8 +264,8 @@ void drawlineV(int y1, int y2, int x) { // teken een verticale lijn
   for (int i = 0; i < len; i++) { // herhaal de volgende code tot elke pixel in de lijn in de
                                   // matrix map staat
 
-    matrixMap[x][y1 + i] = 1; // zet de locatie van de pixel in de matrixMap naar 1. Een muur dus
-    enemyMap[x][y1 + i] = 1; // zet de locatie van de pixel in de enemyMap naar 1. Een muur dus
+    matrixMap[x][y1 + i] = 1; // zet de locatie van de pixel in de matrixMap naar 1. (muur)
+    enemyMap[x][y1 + i] = 1; // zet de locatie van de pixel in de enemyMap naar 1. (muur)
   }
   matrix.drawLine(x, y1, x, y2, matrix.Color333(0, 0, 7));// teken de lijn op het bord
                                                           // met de matrix.X functie
@@ -272,17 +274,17 @@ void drawlineV(int y1, int y2, int x) { // teken een verticale lijn
     <section id="speler">
         <h3 class="kop">Speler maken</h3>
         <h4>
-          Toen we de muur functies af hadden, gingen we werken aan ook echt een pixel laten bewegen op het bord.
-          Hiervoor kunnen we simpel <code>matrix.drawPixel(x,y,Color333)</code>  gebruiken. In elk spel zit een klok en die
-          update het spel. Hievoor gebruikte wij een while loop. Als de speler af gaat door een enemy dan word de 
-          variabele <code>gameStarted</code>  naar <code> False</code> gezet en eindigt de loop.
+          Nadat we de muur functies af hadden gingen we werken aan een bewegende pixel op de Led matrix.
+          Hiervoor konden we simpel <code>matrix.drawPixel(x,y,Color333)</code>  gebruiken. In elk spel zit een klok en die
+          update het spel. Hievoor gebruikten wij een while loop. Als de speler dood gaat door een enemy dan wordt de 
+          variabele <code>gameStarted</code> naar <code> False</code> gezet en eindigt de loop.
         </h4>
         <pre class="line-numbers"><code class="language-ino">while(gameStarted){// game code die elke frame moet worden uitgevoerd...
   // code...
   delay(80); // 80 miliseconde delay voor beter kwaliteit van het spel
 }
 </code></pre>
-        <h4>Omdat we de locatie van de speler bij moeten houden maken we hier variablen voor. De speler begint nu op plek x=1 y=1.</h4>
+        <h4>Omdat we de locatie van de speler bij moeten houden maken we hier variabelen voor. De speler begint nu op plek x=1 y=1.</h4>
         <pre class="line-numbers"><code class="language-ino">int playerLocationX = 1;
 int playerLocationY = 1;</code></pre>
           <h4>
@@ -307,8 +309,8 @@ int playerLocationY = 1;</code></pre>
 }
 </code></pre>
       <h4>
-        Op deze manier kan de speler alle kanten op bewegen. Maar hier hebben we weer een probleem. De speler kan door de muren 
-        heen bewegen. Hiervoor hebben we een aparte functie gemaakt. Een <code>bool</code> staat voor <code>true</code> of <code>false</code>
+        Op deze manier kan de speler alle kanten op bewegen. Maar hier ontdekten wij het probleem dat de speler door de muren 
+        heen kan bewegen. Hiervoor hebben we een aparte functie gemaakt. Een <code>BOOL</code> staat voor <code>TRUE</code> of <code>FALSE</code>
         Deze kunnen we dan in onze speler move gebruiken om te testen of de volgende zet geen muur is.
       </h4>
       <pre class="line-numbers"><code class="language-ino">bool nextMovePossible(int x, int y) { // check of de volgende zet niet een muur is
@@ -320,17 +322,17 @@ int playerLocationY = 1;</code></pre>
       <h4>
         Hieruit volgt: 
       </h4>
-<pre class="line-numbers"><code class="language-ino">if(digitalRead(2) == HIGH) {
+<pre class="line-numbers"><code class="language-ino">if(digitalRead(2) == HIGH) { // als de speler naar links wil bewegen
   if(playerLocationX - 1 > 0 && nextMovePossible(playerLocationX - 1, playerLocationY)) {
     // controleert dus of de speler niet buiten de matrix is EN (&&) of de volgende zet geen muur is.
     matrix.drawPixel(playerLocationX, playerLocationY, matrix.Color333(0, 0, 0)); 
     playerLocationX--; 
   }
 }
-// voor boven, benden en rechts het zelfde
+// voor boven, benden en rechts hetzelfde
 // ...</code></pre>
       <h4>
-        Op deze manier kan de speler vrij bewegen. Het kan niet door muren heen enook niet buiten de matrix komen.
+        Op deze manier kan de speler vrij bewegen. Het kan niet door muren heen en ook niet buiten de matrix komen.
       </h4>
       </section>
       <section id="food">
@@ -348,8 +350,8 @@ int playerLocationY = 1;</code></pre>
   matrix.drawPixel(x, y, matrix.Color333(7, 0, 7)); // de pixel tekenen
 }</code></pre>
         <h4>
-          Ook hebben we een manier nodig om score te laten zien. Op het led panel hebben we een plekje vrijgehouden om de score 
-          laten zien. Ook hiervoor hebbben we een functie gemaakt. Elke keer als er weer een klokcyclus voorbij is, moet deze functie
+          Ook hebben we een manier nodig om de score te laten zien. Op het led panel hebben we een plekje vrijgehouden om de score 
+          laten zien. Ook hiervoor hebben we een functie gemaakt. Elke keer als er weer een klokcyclus voorbij is, moet deze functie
           worden uitgevoerd.
         </h4>
         <pre class="line-numbers"><code class="language-ino">void drawScoreLine(int totalScore){
@@ -359,14 +361,15 @@ int playerLocationY = 1;</code></pre>
   }
   else{
     if(totalScore > 0){ // teken een lijn pas als de score groter is dan 0
-      matrix.drawLine(62, 30, 62, 30-totalScore+1, matrix.Color333(7, 0, 7)); // teken een paarse lijn als
-                                                                              // score lijn
+      matrix.drawLine(62, 30, 62, 30-totalScore+1, matrix.Color333(7, 0, 7)); 
+                                        // teken een paarse lijn als score lijn
     }
   }
 }</code></pre> 
       <h4>
         Een score lijn is erg leuk maar als je geen voedsel kan op eten is het erg lastig om het spel te winnen. Ook dit moet elke 
-        klokcyclus worden gechecked zodat het voedsel bij de scorelijn kan worden toegevoegd. Hierom dus weer een functie:
+        klokcyclus worden gechecked zodat het voedsel bij de scorelijn kan worden toegevoegd. Hiervoor hebben we weer een functie
+        gemaakt:
       </h4>
 
       <pre class="line-numbers"><code class="language-ino">bool isOnFood(int x, int y) { 
@@ -374,14 +377,14 @@ int playerLocationY = 1;</code></pre>
     return true; // ja
   }
   return false; // nee
-}</code></pre><h4>In onze game loop krijgen we dus: </h4>
+}</code></pre><h4>In onze game loop krijgen we vervolgens: </h4>
         <pre class="line-numbers"><code class="language-ino">while(gameStarted){
   // ...
   if (isOnFood(playerLocationX, playerLocationY)) { // is de speler op voedsel?
 
-    matrixMap[playerLocationX][playerLocationY] = 0;  // haal het voedsel uit de matrix. anders kan je het 
-                                                      // meerdere keren voedsel
-    playerFoodCount++; // update food variabele
+    matrixMap[playerLocationX][playerLocationY] = 0; // haal het voedsel uit de matrix. Anders kan je  
+                                                     // het meerdere keren opeten
+    playerFoodCount++; // +1 voedsel
 
   }
   drawScoreLine(playerFoodCount); // update score lijn
@@ -396,10 +399,10 @@ int playerLocationY = 1;</code></pre>
           van de meest efficiente manier om code om te zetten naar de led lampjes. 
         </h4>
         <h4>
-          Als eerst hebben wij geprobeerd om text om te zetten naar pixels. Hier wilde wij dan over heen gaan met een loop
-          die text omzet naar een pixels op het led bord. Helaas was dit moeilijker dan dat we in eerste instantie dachten.
+          Als eerst hebben wij geprobeerd om tekst om te zetten naar pixels. Hier wilden wij dan over heen gaan met een loop
+          die text omzet naar een pixels op het led bord. 
           Hier zijn de lege ruimtes de plek waar de speler door heen kan en het @ symbool was dan de muur. Deze spiegelen
-          we dan ook aan de andere kant en dan heb je een map.
+          we dan ook aan de andere kant en dan heb je een map. Helaas was dit moeilijker dan dat we in eerste instantie dachten.
         </h4>
         <pre class="line-numbers"><code class="language-ino">'@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@',
 '@              @               @',
@@ -428,14 +431,14 @@ int playerLocationY = 1;</code></pre>
         </code></pre>
         <h4>
           Wat niet lukte met letters hebben we ook nog eens geprobeerd met cijfers. Maar helaas geen geluk. Op dit 
-          moment besefte we dat wij de moeiljke manier moesten gaan doen. We moesten de matrix functies gaan gebruiken en de 
+          moment beseften we dat wij de moeilijke manier moesten gaan doen. We moesten de matrix functies gaan gebruiken en de 
           matrix map. 
           <br>
           <br>
           Eerst zijn we begonnen met een design maken zodat we de coordinaten makkelijk konden zien. Natuurlijk hebben wij
           het design gebaseerd op die van de orginele pacman map.
           Het programma 
-          'Aseprite' kwam hier goed van pas. Dit is eigenlijk een pixelart programma maar er waren een paar functies die
+          <b>'Aseprite'</b> kwam hier goed van pas. Dit is eigenlijk een pixelart programma maar er waren een paar functies die
           ons heel erg goed van pas kwamen. 
         </h4>
 
@@ -450,9 +453,9 @@ int playerLocationY = 1;</code></pre>
         <br>
         <br>
         <h4>
-          Na dat we de map hebben in geprogrammeerd hebben we het voedsel er in gemaakt. Eerst hebben we alles uitgestippeld
+          Nadat we de map hadden ingeprogrammeerd hebben we het voedsel er in gezet. Eerst hebben we alles uitgestippeld
           in het design. Daarna hebben we een soort rondes gemaakt. Elke ronde spawnen er 5 stukjes voedsel, als je elk stukje
-          op hebt komen er weer 5 op het scherm. Tot je natuurlijk de scorebar vol hebt, want dan heb je gewonnen.
+          op hebt komen er weer 5 nieuwe op het scherm. Tot je natuurlijk de scorebar vol hebt, want dan heb je gewonnen.
         </h4>
         <pre class="line-numbers"><code class="language-ino">if (clockCount == 50){wave(0);}; // clockCount wordt gebruikt omdat 
                                 //anders het voedsel eerder spawned dan de map
@@ -463,8 +466,8 @@ if (playerFoodCount == 20){wave(4);};
 if (playerFoodCount == 25){wave(5);};
 if (playerFoodCount == 30){handleWin();};</code></pre>
           <h4>
-            <code>handleWin()</code> zorgt voor dat alles afsluit en het spel stopt. De <code>wave(x)</code> functie zorgt 
-            zorgt voor het voedsel die moet spawnen elke ronde.
+            <code>handleWin()</code> zorgt ervoor dat alles afsluit en het spel stopt. De <code>wave(x)</code> functie  
+            zorgt voor het voedsel dat elke nieuwe ronde moet spawnen.
           </h4>
           <h4>
           </h4>
@@ -477,16 +480,16 @@ if (playerFoodCount == 30){handleWin();};</code></pre>
           <code><a href="https://nl.wikipedia.org/wiki/Kortstepad-algoritme" style="color: aliceblue;"> Dijkstra's algoritme</a> </code> 
           (wikipedia) geprobeerd en ook
           <code><a href="https://nl.wikipedia.org/wiki/Breadth-first_search" style="color: aliceblue;"> Breadth First Search (BFS)</a></code>
-          (wikipedia) maar, helaas waren ze bijde niet gelukt.
+          (wikipedia) maar, helaas waren ze beide niet gelukt.
         </h4>
         <h4>
           Daarom zijn we met een eigen oplossing gekomen. We hebben handmatig op elk punt van de map de 
-          kruisingen aangeven in de enemyMap. Hierdoor kunnen we elke game klok checken of de enemy op een 
+          kruisingen aangegeven in de enemyMap. Hierdoor kunnen we elke game klok checken of de enemy op een 
           kruising staat waarbij we ze dan een random richting in kunnen sturen.
         </h4>
         <h4>
-          Hiervoor hebben we een paar variablen moeten aanmaken. We wilde 4 enemies hebben waar we van alle 
-          de coordinaten en de richting moesten opslaan.
+          Hiervoor hebben we een paar variablen moeten aanmaken. We wilden 4 enemies hebben waarvan we alle 
+          coordinaten en de richting moesten opslaan.
         </h4>
         <pre class="line-numbers"><code class="language-ino">//enemy info
 int enemyLocationX = 0;
@@ -506,7 +509,7 @@ int enemyLocationY4 = 0;
 int enemyDir4 = 2;</code></pre>
 
           <h4>
-            Na deze variablen hebben aan te hebben gemaakt kunnen we de benodigde functies maken. Eerst 
+            Na deze variablen  aan te hebben gemaakt kunnen we de benodigde functies maken. Eerst 
             maken we een functie waar we een random getal krijgen die we kunnen verbinden aan een richting. <br>
             0 = boven<br>
             1 = rechts<br>
@@ -523,28 +526,28 @@ else if (randomNumb == 3) {enemyDir = 3;}
 </code></pre>
           <h4>
             Daarna kunnen we een handleEnemyMovement functie maken waardoor we elke game klok de enemie locatie
-            kunnen updaten. Ook gebruiken we een zelfde soort functie gebruiken als die van de speler; 
+            kunnen updaten. Ook gebruiken we een zelfde soort functie als die van de speler; 
             <code>nextMovePossible</code>. Deze kunnen we ook gebruiken voor de enemy.
           </h4>
           <pre class="line-numbers"><code class="language-ino">void handleEnemyMovement1(){
   if(enemyDir == 0) { // enemy gaat naar boven
     if (nextMoveEnemy(enemyLocationX, enemyLocationY - 1)) // check of de volgende zet mogelijk is
     {
-      matrix.drawPixel(enemyLocationX, enemyLocationY, matrix.Color333(0,0,0)); // zet de vorige pixel uit
-      if (matrixMap[enemyLocationX][enemyLocationY] == 2) // als de vorige pixel voedsel was, terug plaatsen
+      matrix.drawPixel(enemyLocationX, enemyLocationY, matrix.Color333(0,0,0)); //zet de vorige pixel uit
+      if (matrixMap[enemyLocationX][enemyLocationY] == 2) // is de vorige pixel voedsel?
       {
-        drawFood(enemyLocationX,enemyLocationY);
+        drawFood(enemyLocationX,enemyLocationY); // teken op die plek weer voedsel terug
       }
-      enemyLocationY--; // verander de coordinaten van de enemie
+      enemyLocationY--; // verander de coordinaten van de enemy 
     }
   }
   else if(enemyDir == 1) { // enemy gaat naar rechts
     if (nextMoveEnemy(enemyLocationX + 1, enemyLocationY)) // check of de volgende zet mogelijk is
     {
-      matrix.drawPixel(enemyLocationX, enemyLocationY, matrix.Color333(0,0,0)); // zet de vorige pixel uit
-      if (matrixMap[enemyLocationX][enemyLocationY] == 2) // als de vorige pixel voedsel was, terug plaatsen
+      matrix.drawPixel(enemyLocationX, enemyLocationY, matrix.Color333(0,0,0)); //zet de vorige pixel uit
+      if (matrixMap[enemyLocationX][enemyLocationY] == 2) // is de vorige pixel voedsel?
       {
-        drawFood(enemyLocationX,enemyLocationY);
+        drawFood(enemyLocationX,enemyLocationY); // teken op die plek weer voedsel terug
       }
       enemyLocationX++; // verander de coordinaten van de enemie
     }
@@ -568,31 +571,31 @@ else if (randomNumb == 3) {enemyDir = 3;}
       <section id="moeilijkheid">
         <h3 class="kop">Moeilijkheidsgraad</h3>
         <h4>
-          Toen wij het spel gingen spelen om te testen was het speel erg lastig. Maar we wilden niet te
+          Toen wij het spel gingen spelen om te testen was het spel erg lastig. Maar we wilden niet te
           veel weg halen uit het spel. Daarom hebben we besloten een moeilijkheidsgraad te maken. Easy en Hard.
           Natuurlijk moet je ook de moeilijkheidsgraad kunnen kiezen dus hebben we er ook een menu bij gemaakt.
-          De code hiervan is niet zo interessant. Maar ik leg het wel uit.
+          De code hiervan is niet zo interessant. Maar we leggen het wel uit.
           <br>
           <br>
           In onze game loop hebben wij standaard 2 enemies een random locatie gegeven. Als de game in het start 
-          menu op Hard staat, krijgen de andere 2 enemies ook random locaties. 
+          menu op Hard staat, krijgen de andere 2 enemies ook random locaties. Anders worden ze niet ingeladen en staan ze vast.
         </h4>
       </section>
     </section>
     <section id="joystick">
       <h3 class="kop1">Joystick</h3>
       <h4>
-        Nadat we de hele code klaar hadden wilde wij onze controller gaan veranderen. Wij hadden tot nu toe
-        alleen nog maar dat bordje met wat buttons en heel veel draadjes. Dit is natuurlijk niet echt fijn
-        om mee te spelen dus hebben we aan Meneer Gnodde gevraagd voor een joystick.
+        Nadat we de hele code klaar hadden wilden wij onze controller gaan veranderen. Wij hadden tot nu toe
+        alleen nog maar het breadboard met wat buttons en heel veel draadjes. Dit is natuurlijk niet echt fijn
+        om mee te spelen dus hebben we aan Meneer Gnodde gevraagd of hij een joystick kon regelen.
       </h4>
       <img src="./src/joystick.jpg" alt="joystick">
       <h4>
-        Aan deze joystick zitten 8 metalen lipjes waar een gatje in zit. Voor bijde X en Y axis zit een plus
-        en een min lipje. Meteen zag Mellon al hoe dit systeem werkte. De joystick zit in soort plusje van 
-        plastic waardoor de joystick naar links rechts boven en beneden kan. Als de joystick naar rechts wordt
-        geduwt, gaat de onder kant van het stokje van de joystick naar links. Deze duwt tegen een 
-        een metaal plaatje waardoor er een gesloten stroom kring ontstaat. We kunnen het zelfde concept als bij de buttons toe passen, want het doet in principe het zelfde als de
+        Aan deze joystick zitten 8 metalen lipjes waar een gaatje in zit. Voor bijde X en Y axis zit een plus
+        en een min lipje. Meteen zag Mellon al hoe dit systeem werkte. De joystick zit in een soort plusje van 
+        plastic waardoor de joystick naar links, rechts, boven en beneden kan. Als de joystick naar rechts wordt
+        geduwt, gaat de onder kant van het stokje van de joystick naar links. Deze duwt tegen 
+        een metaal plaatje waardoor er een gesloten stroom kring ontstaat. We kunnen hetzelfde concept als bij de buttons toe passen, want het doet in principe het zelfde als de
         knopjes die we eerst hadden. 
         <br>
         <br>
@@ -603,8 +606,8 @@ else if (randomNumb == 3) {enemyDir = 3;}
     <section id="conclusie">
       <h3 class="kop2">Conclusie</h3>
       <h4>
-        We hebben in dit project veel geleerd. We hebben veel over de arduino programmeer taal geleerd en
-        over elektronica. Meer valt er niet echt over te vertellen. We hebben veel plezier gehaald uit het
+        We hebben in dit project veel geleerd. We hebben veel over de programmeertaal geleerd en
+        over elektronica. We hebben veel plezier gehaald uit het
         onderzoek doen naar de arduino en naar verschillende manieren om bepaalde problemen op te lossen.
       </h4>
     </section>
