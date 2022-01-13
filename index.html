@@ -116,6 +116,7 @@ void loop() // blijft oneindig lang runnen
         Arduino worden aangesloten. 
       </h4>
       <img class="bordImg" src="./src/bord aansluiting.jpg" alt="bord aansluitingen">
+      <img src="./src/spagetti.jpeg" alt="spaghetti">
       <h4>
         In onze code zag het er wat rustiger uit. Naast deze code en de ingewikelde draadjes was dit de hele setup van ons 
         project.
@@ -131,6 +132,13 @@ void loop() // blijft oneindig lang runnen
 #define D   A3
 RGBmatrixPanel matrix(A, B, C, D, CLK, LAT, OE, false, 64); // vertel tegen de driver op welke 
                                                             // pin ze wat kunnen vinden</code></pre>
+
+
+    <h4>
+      Hierna hebben we ook nog wat testjes gedaan met het bord. We hebben een paar van de functies getest op het bord.
+      Het was niet heel bijzonder maar we hebben hier wel wat van geleerd.
+    </h4>
+    <img src="./src/start.jpeg" alt="start">
     </section>
     <section class="controller" id="controller">
       <h3 class="kop">De controller maken</h3>
@@ -334,7 +342,7 @@ int playerLocationY = 1;</code></pre>
       <h4>
         Op deze manier kan de speler vrij bewegen. Het kan niet door muren heen en ook niet buiten de matrix komen.
       </h4>
-      </section>
+      <iframe width="560" height="315" src="https://www.youtube.com/embed/HjnuQOzeR3E" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>      </section>
       <section id="food">
         <h3 class="kop">Puntensysteem</h3>
         <h4>
@@ -390,7 +398,8 @@ int playerLocationY = 1;</code></pre>
   drawScoreLine(playerFoodCount); // update score lijn
   // meer code ...
 }</code></pre>
-
+<br>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/-u_DolRYII0" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
       </section>
       <section id="map">
         <h3 class="kop">De map</h3>
@@ -471,6 +480,7 @@ if (playerFoodCount == 30){handleWin();};</code></pre>
           </h4>
           <h4>
           </h4>
+          <img src="./src/map bijna af.jpeg" alt="map bijna af">
       </section>
       <section id="enemies">
         <h3 class="kop">Enemies</h3>
