@@ -1,5 +1,5 @@
 # Arduino-Pacman
-This is an old school project of me with lots of bugs. But it might be usefull if you want to create something similair.
+This is an old school-project of mine. It has lots of bugs but it might be usefull if you want to create something similair.
 
 I used the 'Arduino MEGA2560' with these pieces of hardware:
 
